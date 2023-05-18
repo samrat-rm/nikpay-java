@@ -48,6 +48,9 @@ public class TransferController {
 
     @PostMapping("/users/transfer")
     public ResponseEntity<?> transferMoney(@RequestHeader("token") String token, @RequestParam("email") String email, @RequestParam("amount") float amount) {
+        if (amount <= 0 || email.isEmpty()) {
+            return ResponseEntity.badRequest().body("Amount must be greater than zero and Email is required");
+        }
 
         if (!jwtUtil.verifyToken(token)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
