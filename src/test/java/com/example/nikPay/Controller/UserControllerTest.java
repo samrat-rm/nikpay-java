@@ -48,14 +48,17 @@ public class UserControllerTest {
 
     @Test
     public void testSaveUser_Success() throws Exception {
-        User user = new User("example@example.com", "password" , "samrat","r m");
+        // Arrange
+        User user = new User("example@example.com", "password", "samrat", "r m");
         user.setUserID("1");
 
-        when(userService.saveUser(any(User.class) , Currency.AUD)).thenReturn(user);
+        when(userService.saveUser(any(User.class), eq(Currency.AUD))).thenReturn(user);
         when(jwtUtil.generateToken(eq("1"), anyLong())).thenReturn("mocked-token");
 
+        // Act and Assert
         mockMvc.perform(MockMvcRequestBuilders.post("/user/save")
                         .contentType(MediaType.APPLICATION_JSON)
+                        .param("currency", "AUD")
                         .content("{\"email\":\"example@example.com\",\"password\":\"password\"}"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.token").value("mocked-token"));
@@ -65,27 +68,20 @@ public class UserControllerTest {
     public void testGetUserById_UserExists_ReturnsUser() throws Exception {
         // Arrange
         String token = "valid-token";
-        User user = new User("example@example.com", "password" , "samrat","r m");
+        User user = new User("example@example.com", "password", "samrat", "r m");
         user.setUserID("1");
 
-        // Mock the behavior of JwtUtil.verifyToken() method
         when(jwtUtil.verifyToken(token)).thenReturn(true);
+        when(userService.getUserFromToken(token)).thenReturn(user);
 
-        // Mock the behavior of JwtUtil.parseToken() method
-        when(jwtUtil.parseToken(token)).thenReturn(getMockClaims());
-
-        // Mock the behavior of UserService.getUser() method
-        when(userService.getUser("1")).thenReturn(user);
-
-        // Setup MockMvc
-        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
-
-        // Perform the GET request and assert the response
+        // Act and Assert
         mockMvc.perform(MockMvcRequestBuilders.get("/user")
                         .header("token", token))
-                .andExpect(MockMvcResultMatchers.status().isOk());
-
-        //  add more test statements
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.email").value("example@example.com"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.password").value("password"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.firstName").value("samrat"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.lastName").value("r m"));
     }
 
     @Test
@@ -98,7 +94,7 @@ public class UserControllerTest {
 
     @Test
     public void testSignIn_ValidCredentials_ReturnsTrue() throws Exception {
-        User user = new User("test@example.com", "password" , "samrat","r m");
+        User user = new User("test@example.com", "password", "samrat", "r m");
 
         when(userService.checkPassword(user.getEmail(), user.getPassword())).thenReturn(true);
 
@@ -111,7 +107,7 @@ public class UserControllerTest {
 
     @Test
     public void testSignIn_InvalidCredentials_ReturnsFalse() throws Exception {
-        User user = new User("test1234@example.com", "password" , "samrat","r m");
+        User user = new User("test1234@example.com", "password", "samrat", "r m");
 
         when(userService.checkPassword(user.getEmail(), user.getPassword())).thenReturn(false);
 
@@ -121,11 +117,10 @@ public class UserControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isUnauthorized())
                 .andExpect(MockMvcResultMatchers.content().string("false"));
     }
+
     private Claims getMockClaims() {
-        // Create a mock Claims object with required data
         Claims claims = Jwts.claims();
         claims.setSubject("202d8aa3-89d2-4497-8880-97194fc8aa5c");
-        // Set any other required claims or data
 
         return claims;
     }
