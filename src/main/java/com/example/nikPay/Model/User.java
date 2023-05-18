@@ -10,7 +10,17 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Integer id;
+    @JsonProperty("email")
+    @Column(unique = true)
+    private String email;
+    @JsonProperty("password")
+    private String password;
 
+    private String firstName;
+
+    private String lastName;
+
+    private String userID = UUID.randomUUID().toString();
 
     public void setId(Integer id) {
         this.id = id;
@@ -52,17 +62,7 @@ public class User {
         return password;
     }
 
-    @JsonProperty("email")
-    @Column(unique = true)
-    private String email;
-    @JsonProperty("password")
-    private String password;
 
-    private String firstName;
-
-    private String lastName;
-
-    private String userID = UUID.randomUUID().toString();
 
     public void setUserID(String userID) {
         this.userID = userID;

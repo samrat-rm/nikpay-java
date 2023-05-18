@@ -2,27 +2,25 @@ package com.example.nikPay.Service;
 
 import com.example.nikPay.Currency;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class CurrencyService {
     public static float convertCurrency(Currency baseCurrency, Currency targetCurrency, float value) {
-        // Perform the currency conversion logic here
-        // You can use a predefined exchange rate or an external API for currency conversion
 
-        // For demonstration purposes, let's assume a conversion rate of 1.2 from EUR to USD
-        float exchangeRate = 1.2f;
+        Map<String, Float> currencyRates = new HashMap<>();
+        currencyRates.put("USD", 1f);
+        currencyRates.put("INR", 82.75f);
+        currencyRates.put("EURO", 0.93f);
+        currencyRates.put("AUD", 1.51f);
+        currencyRates.put("GBP", 0.81f);
+        currencyRates.put("JPY", 138.44f);
+        currencyRates.put("CAD", 1.35f);
 
-        if (baseCurrency == targetCurrency) {
-            // No conversion needed, return the original value
-            return value;
-        } else if (baseCurrency == Currency.EUR && targetCurrency == Currency.USD) {
-            // Convert from EUR to USD
-            return value * exchangeRate;
-        } else if (baseCurrency == Currency.USD && targetCurrency == Currency.EUR) {
-            // Convert from USD to EUR
-            return value / exchangeRate;
-        } else {
-            // Conversion between the given currencies is not supported
-            throw new IllegalArgumentException("Currency conversion not supported for " + baseCurrency + " to " + targetCurrency);
-        }
+        float baseCurrencyRate = currencyRates.get(baseCurrency.name());
+        float targetCurrencyRate = currencyRates.get(targetCurrency.name());
+        float ratio = targetCurrencyRate/baseCurrencyRate;
+        return value * ratio;
     }
 
 }

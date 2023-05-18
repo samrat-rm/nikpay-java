@@ -6,6 +6,7 @@ public enum Currency {
     JPY("Japanese Yen"),
     GBP("British Pound Sterling"),
     AUD("Australian Dollar"),
+    INR ("Indian Rupee"),
     CAD("Canadian Dollar");
 
     private final String displayName;

@@ -13,30 +13,13 @@ import static com.example.nikPay.Service.CurrencyService.convertCurrency;
 public class WalletService {
     @Autowired
     private WalletRepo walletRepo;
+
     public float credit(String userID, float amount, Currency currency) {
         Wallet wallet = walletRepo.findByUserID(userID);
         if (wallet != null) {
-
-            Currency userCurrency =  Currency.valueOf(wallet.getCurrency());;
-
-            if (userCurrency == currency) {
-                // Same currency, directly add the amount to the wallet
-                float previousAmount = wallet.getAmount();
-                float updatedAmount = previousAmount + amount;
-                wallet.setAmount(updatedAmount);
-                walletRepo.save(wallet);
-                return wallet.getAmount();
-            } else {
-                // Convert the received currency to the user's currency
-                float convertedAmount = convertCurrency(currency, userCurrency, amount);
-
-                // Add the converted amount to the wallet
-                float previousAmount = wallet.getAmount();
-                float updatedAmount = previousAmount + convertedAmount;
-                wallet.setAmount(updatedAmount);
-                walletRepo.save(wallet);
-                return wallet.getAmount();
-            }
+            float updatedAmount =  wallet.creditAmount(amount, currency);
+            walletRepo.save(wallet);
+            return updatedAmount;
         } else {
             throw new IllegalArgumentException("Wallet not found for userID: " + userID);
         }
@@ -47,38 +30,13 @@ public class WalletService {
         Wallet wallet = walletRepo.findByUserID(userID);
         if (wallet != null) {
             Currency userCurrency = Currency.valueOf(wallet.getCurrency());
-
-            if (userCurrency == currency) {
-                // Same currency, directly deduct the amount from the wallet
-                float previousAmount = wallet.getAmount();
-                float updatedAmount = previousAmount - amount;
-                if (updatedAmount < 0) {
-                    throw new IllegalArgumentException("Insufficient funds. Cannot debit amount: " + amount);
-                }
-                wallet.setAmount(updatedAmount);
-                walletRepo.save(wallet);
-                System.out.println(wallet.getAmount()+wallet.getCurrency());
-                return wallet.getAmount();
-            } else {
-                // Convert the received currency to the user's currency
-                float convertedAmount = convertCurrency(currency, userCurrency, amount);
-
-                // Deduct the converted amount from the wallet
-                float previousAmount = wallet.getAmount();
-                float updatedAmount = previousAmount - convertedAmount;
-                if (updatedAmount < 0) {
-                    throw new IllegalArgumentException("Insufficient funds. Cannot debit amount: " + amount);
-                }
-                wallet.setAmount(updatedAmount);
-                walletRepo.save(wallet);
-                return wallet.getAmount();
-            }
+            return wallet.debitAmount(amount, currency);
         } else {
             throw new IllegalArgumentException("Wallet not found for userID: " + userID);
         }
     }
 
-    public void save(Wallet wallet){
+    public void save(Wallet wallet) {
         walletRepo.save(wallet);
     }
 }
