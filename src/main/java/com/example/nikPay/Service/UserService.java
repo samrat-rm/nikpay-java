@@ -28,8 +28,9 @@ public class UserService {
         if (user.getEmail() == null || user.getPassword() == null) {
             throw new IllegalArgumentException("User object cannot be null");
         }
-        Wallet wallet = new Wallet(user.getUserID(),currency );
+        Wallet wallet = new Wallet(user.getUserID(), currency.name() );
         Wallet wal = walletRepo.save(wallet);
+        System.out.println(wal.getCurrency());
         return userRepo.save(user);
     }
 }

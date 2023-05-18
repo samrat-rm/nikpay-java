@@ -16,7 +16,8 @@ public class WalletService {
     public float credit(String userID, float amount, Currency currency) {
         Wallet wallet = walletRepo.findByUserID(userID);
         if (wallet != null) {
-            Currency userCurrency = wallet.getCurrency();
+
+            Currency userCurrency =  Currency.valueOf(wallet.getCurrency());;
 
             if (userCurrency == currency) {
                 // Same currency, directly add the amount to the wallet

@@ -1,63 +1,52 @@
 package com.example.nikPay.Model;
 
-import com.example.nikPay.Currency;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import javax.persistence.Column;
-import javax.persistence.Enumerated;
-import javax.persistence.EnumType;
+import jakarta.persistence.*;
+
+import java.util.UUID;
 
 @Entity
 public class Wallet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id;
+    public Integer id;
 
-    @JsonProperty("userID")
-    String userID ;
+    private String currency ;
 
+    private String userID ;
 
-    String currency;
+    private float amount ;
 
-
-    public void setAmount(float amount) {
-        this.amount = amount;
+    public String getCurrency() {
+        return currency;
     }
 
-
-    public void setUserID(String userID) {
-        this.userID = userID;
+    public void setCurrency(String currency) {
+        this.currency = currency;
     }
 
     public String getUserID() {
         return userID;
     }
 
+    public void setUserID(String userID) {
+        this.userID = userID;
+    }
+
     public float getAmount() {
         return amount;
     }
 
-    float amount;
-
-    public Wallet() {
-        // Default constructor
+    public void setAmount(float amount) {
+        this.amount = amount;
     }
 
-    public void setCurrency(Currency currency) {
-        this.currency = currency.name();
-    }
-
-    public Currency getCurrency() {
-        return Currency.valueOf(this.currency);
-    }
-
-    public Wallet(String userID, Currency currency) {
-        System.out.println(userID + currency);
+    public Wallet(String userID, String currency) {
+        this.currency = currency;
         this.userID = userID;
-        this.currency = currency.name();
         this.amount = 0f;
     }
+    public Wallet() {
+    }
+
 }
