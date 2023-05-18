@@ -39,24 +39,24 @@ public class WalletController {
         }
     }
 
-    @PostMapping("/wallet/debit/{amount}")
-    public ResponseEntity<Float> debitAmount(@PathVariable("amount") float amount, @RequestHeader("token") String token) {
+    @PostMapping("/wallet/debit")
+    public ResponseEntity<Float> debitAmount(@RequestParam("amount") float amount, @RequestParam("currency") Currency currency, @RequestHeader("token") String token) {
         try {
             if (jwtUtil.verifyToken(token)) {
                 Claims claims = jwtUtil.parseToken(token);
                 String userID = claims.getSubject();
-                float currentAmount = walletService.debit(userID, amount);
+                float currentAmount = walletService.debit(userID, amount , currency);
                 return ResponseEntity.ok(currentAmount);
             } else {
                 // Token verification failed, return unauthorized access response
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
             }
         } catch (IllegalArgumentException e) {
-            // Handle insufficient funds exception
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(0.0f);
+            // Handle wallet not found exception
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         } catch (Exception e) {
             // Handle other exceptions
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(0.0f);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 

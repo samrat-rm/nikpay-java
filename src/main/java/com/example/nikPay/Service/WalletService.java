@@ -42,21 +42,42 @@ public class WalletService {
         }
     }
 
-    public float debit(String userID, float amount) {
+    public float debit(String userID, float amount, Currency currency) {
+
         Wallet wallet = walletRepo.findByUserID(userID);
         if (wallet != null) {
-            float previousAmount = wallet.getAmount();
-            float updatedAmount = previousAmount - amount;
-            if (updatedAmount < 0) {
-                throw new IllegalArgumentException("Insufficient funds. Cannot debit amount: " + amount);
+            Currency userCurrency = Currency.valueOf(wallet.getCurrency());
+
+            if (userCurrency == currency) {
+                // Same currency, directly deduct the amount from the wallet
+                float previousAmount = wallet.getAmount();
+                float updatedAmount = previousAmount - amount;
+                if (updatedAmount < 0) {
+                    throw new IllegalArgumentException("Insufficient funds. Cannot debit amount: " + amount);
+                }
+                wallet.setAmount(updatedAmount);
+                walletRepo.save(wallet);
+                System.out.println(wallet.getAmount()+wallet.getCurrency());
+                return wallet.getAmount();
+            } else {
+                // Convert the received currency to the user's currency
+                float convertedAmount = convertCurrency(currency, userCurrency, amount);
+
+                // Deduct the converted amount from the wallet
+                float previousAmount = wallet.getAmount();
+                float updatedAmount = previousAmount - convertedAmount;
+                if (updatedAmount < 0) {
+                    throw new IllegalArgumentException("Insufficient funds. Cannot debit amount: " + amount);
+                }
+                wallet.setAmount(updatedAmount);
+                walletRepo.save(wallet);
+                return wallet.getAmount();
             }
-            wallet.setAmount(updatedAmount);
-            walletRepo.save(wallet);
-            return wallet.getAmount();
         } else {
             throw new IllegalArgumentException("Wallet not found for userID: " + userID);
         }
     }
+
     public void save(Wallet wallet){
         walletRepo.save(wallet);
     }
