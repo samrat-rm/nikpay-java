@@ -28,11 +28,12 @@ public class UserController {
     private JwtUtil jwtUtil;
 
     @PostMapping("/user/save")
-    public ResponseEntity<?> saveUser(@RequestBody User user ,@RequestParam("currency")Currency currency ){
-        User savedUser = userService.saveUser(user , currency);
+    public ResponseEntity<?> saveUser(@RequestBody User user, @RequestParam("currency") Currency currency) {
+        User savedUser = userService.saveUser(user, currency);
         String token = jwtUtil.generateToken(savedUser.getUserID(), 3600000); // Generate token with 1 hour expiration
         return ResponseEntity.ok(new TokenResponse(token));
     }
+
     @GetMapping("/user")
     public ResponseEntity<User> getUserById(  @RequestHeader("token")String token){
         if (jwtUtil.verifyToken(token)) {

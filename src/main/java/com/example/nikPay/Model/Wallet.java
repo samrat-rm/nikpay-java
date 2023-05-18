@@ -6,6 +6,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import javax.persistence.Column;
+import javax.persistence.Enumerated;
+import javax.persistence.EnumType;
 
 @Entity
 public class Wallet {
@@ -16,8 +19,8 @@ public class Wallet {
     @JsonProperty("userID")
     String userID ;
 
-    @JsonProperty("currency")
-    Currency currency;
+
+    String currency;
 
 
     public void setAmount(float amount) {
@@ -44,16 +47,17 @@ public class Wallet {
     }
 
     public void setCurrency(Currency currency) {
-        this.currency = currency;
+        this.currency = currency.name();
     }
 
     public Currency getCurrency() {
-        return currency;
+        return Currency.valueOf(this.currency);
     }
 
     public Wallet(String userID, Currency currency) {
+        System.out.println(userID + currency);
         this.userID = userID;
-        this.currency = currency;
+        this.currency = currency.name();
         this.amount = 0f;
     }
 }

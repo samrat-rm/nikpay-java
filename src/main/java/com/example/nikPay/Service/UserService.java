@@ -30,7 +30,6 @@ public class UserService {
         }
         Wallet wallet = new Wallet(user.getUserID(),currency );
         Wallet wal = walletRepo.save(wallet);
-        System.out.println(wal);
         return userRepo.save(user);
     }
 }

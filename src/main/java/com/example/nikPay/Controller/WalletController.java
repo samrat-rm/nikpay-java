@@ -1,17 +1,15 @@
 package com.example.nikPay.Controller;
 
 import com.example.nikPay.Config.JwtUtil;
+import com.example.nikPay.Currency;
 import com.example.nikPay.Model.User;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import com.example.nikPay.Service.WalletService;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
@@ -20,13 +18,13 @@ public class WalletController {
     private WalletService walletService ;
     @Autowired
     private JwtUtil jwtUtil ;
-    @PostMapping("/wallet/credit/{amount}")
-    public ResponseEntity<Float> creditAmount(@PathVariable("amount") float amount, @RequestHeader("token") String token) {
+    @PostMapping("/wallet/credit")
+    public ResponseEntity<Float> creditAmount(@RequestParam("amount") float amount, @RequestParam("currency") Currency currency, @RequestHeader("token") String token) {
         try {
             if (jwtUtil.verifyToken(token)) {
                 Claims claims = jwtUtil.parseToken(token);
                 String userID = claims.getSubject();
-                float currentAmount = walletService.credit(userID, amount);
+                float currentAmount = walletService.credit(userID, amount , currency);
                 return ResponseEntity.ok(currentAmount);
             } else {
                 // Token verification failed, return unauthorized access response

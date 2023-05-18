@@ -3,7 +3,7 @@ package com.example.nikPay.Service;
 import com.example.nikPay.Currency;
 
 public class CurrencyService {
-    public float convertCurrency(Currency baseCurrency, Currency targetCurrency, float value) {
+    public static float convertCurrency(Currency baseCurrency, Currency targetCurrency, float value) {
         // Perform the currency conversion logic here
         // You can use a predefined exchange rate or an external API for currency conversion
 
