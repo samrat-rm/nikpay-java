@@ -22,6 +22,21 @@ public class WalletService {
             throw new IllegalArgumentException("Wallet not found for userID: " + userID);
         }
     }
+    public float debit(String userID, float amount) {
+        Wallet wallet = walletRepo.findByUserID(userID);
+        if (wallet != null) {
+            float previousAmount = wallet.getAmount();
+            float updatedAmount = previousAmount - amount;
+            if (updatedAmount < 0) {
+                throw new IllegalArgumentException("Insufficient funds. Cannot debit amount: " + amount);
+            }
+            wallet.setAmount(updatedAmount);
+            walletRepo.save(wallet);
+            return wallet.getAmount();
+        } else {
+            throw new IllegalArgumentException("Wallet not found for userID: " + userID);
+        }
+    }
     public void save(Wallet wallet){
         walletRepo.save(wallet);
     }

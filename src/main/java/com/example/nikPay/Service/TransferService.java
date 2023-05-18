@@ -20,16 +20,16 @@ public class TransferService {
         return userRepo.findByEmail(email);
     }
 
-    public boolean checkBalance(UUID userID , float debit ){
-
-    }
-    public User saveUser(User user){
-        if (user.getEmail() == null || user.getPassword() == null) {
-            throw new IllegalArgumentException("User object cannot be null");
+    public boolean checkBalance(String userID , float debitAmount ){
+        Wallet wallet  = walletRepo.findByUserID(userID);
+        float balance = wallet.getAmount();
+        if( balance > debitAmount){
+            return true;
+        }else{
+            return false;
         }
-        Wallet wallet = new Wallet(user.getUserID());
-        Wallet wal = walletRepo.save(wallet);
-        System.out.println(wal);
-        return userRepo.save(user);
     }
+   public boolean transfer (String senderID , String receiverID , float amount ){
+    return  true;
+   }
 }
