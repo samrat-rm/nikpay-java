@@ -3,6 +3,7 @@ package com.example.nikPay.Controller;
 import com.example.nikPay.Config.JwtUtil;
 import com.example.nikPay.Currency;
 import com.example.nikPay.Model.User;
+import com.example.nikPay.Service.UserService;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,26 +16,27 @@ import com.example.nikPay.Service.WalletService;
 @RestController
 public class WalletController {
     @Autowired
-    private WalletService walletService ;
+    private WalletService walletService;
+
     @Autowired
-    private JwtUtil jwtUtil ;
+    private UserService userService;
+    @Autowired
+    private JwtUtil jwtUtil;
+
     @PostMapping("/wallet/credit")
     public ResponseEntity<Float> creditAmount(@RequestParam("amount") float amount, @RequestParam("currency") Currency currency, @RequestHeader("token") String token) {
         try {
             if (jwtUtil.verifyToken(token)) {
                 Claims claims = jwtUtil.parseToken(token);
                 String userID = claims.getSubject();
-                float currentAmount = walletService.credit(userID, amount , currency);
+                float currentAmount = walletService.credit(userID, amount, currency);
                 return ResponseEntity.ok(currentAmount);
             } else {
-                // Token verification failed, return unauthorized access response
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
             }
         } catch (IllegalArgumentException e) {
-            // Handle wallet not found exception
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         } catch (Exception e) {
-            // Handle other exceptions
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
@@ -42,22 +44,17 @@ public class WalletController {
     @PostMapping("/wallet/debit")
     public ResponseEntity<Float> debitAmount(@RequestParam("amount") float amount, @RequestParam("currency") Currency currency, @RequestHeader("token") String token) {
         try {
-            if (jwtUtil.verifyToken(token)) {
-                Claims claims = jwtUtil.parseToken(token);
-                String userID = claims.getSubject();
-                float currentAmount = walletService.debit(userID, amount , currency);
-                return ResponseEntity.ok(currentAmount);
-            } else {
-                // Token verification failed, return unauthorized access response
+            if (!jwtUtil.verifyToken(token)) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
             }
+            String userID = userService.getUserIDFromToken(token);
+            float currentAmount = walletService.debit(userID, amount, currency);
+            return ResponseEntity.ok(currentAmount);
+
         } catch (IllegalArgumentException e) {
-            // Handle wallet not found exception
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         } catch (Exception e) {
-            // Handle other exceptions
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
-
 }

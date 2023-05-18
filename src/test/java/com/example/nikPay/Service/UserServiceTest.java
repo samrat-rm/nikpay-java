@@ -36,7 +36,7 @@ class UserServiceTest {
     @Test
     void testSaveUser_ValidUser_ReturnsSavedUser() {
         // Mock the walletRepo.save() method
-        when(walletRepo.save(any(Wallet.class))).thenReturn(new Wallet("walletId" , Currency.AUD));
+        when(walletRepo.save(any(Wallet.class))).thenReturn(new Wallet("walletId" , Currency.AUD.name()));
 
         // Mock the userRepo.save() method
         User savedUser = new User("example@example.com", "password" , "samrat","r m");

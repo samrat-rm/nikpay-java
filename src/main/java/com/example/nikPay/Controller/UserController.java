@@ -6,9 +6,7 @@ import com.example.nikPay.Currency;
 import com.example.nikPay.Service.UserService;
 import com.example.nikPay.Model.User;
 import com.example.nikPay.Service.WalletService;
-import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,23 +33,20 @@ public class UserController {
     }
 
     @GetMapping("/user")
-    public ResponseEntity<User> getUserById(  @RequestHeader("token")String token){
-        if (jwtUtil.verifyToken(token)) {
-            Claims claims = jwtUtil.parseToken(token);
-            String userID = claims.getSubject();
-            User user  = userService.getUser(userID);
-            return ResponseEntity.ok(user);
-        }else {
-            // Token verification failed, return unauthorized access response
+    public ResponseEntity<User> getUserById(@RequestHeader("token") String token) {
+        if (!jwtUtil.verifyToken(token)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
+        User user = userService.getUserFromToken(token);
+        return ResponseEntity.ok(user);
     }
 
+    // SIGN IN
     @GetMapping("/user/verify")
-    public ResponseEntity<Boolean> signIn(@RequestBody User user ) {
+    public ResponseEntity<Boolean> signIn(@RequestBody User user) {
         try {
             boolean isSignedIn = userService.checkPassword(user.getEmail(), user.getPassword());
-            if(!isSignedIn){
+            if (!isSignedIn) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
             }
             return ResponseEntity.ok(isSignedIn);
