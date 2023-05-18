@@ -27,19 +27,37 @@ public class UserController {
 
     @PostMapping("/user/save")
     public ResponseEntity<?> saveUser(@RequestBody User user, @RequestParam("currency") Currency currency) {
-        User savedUser = userService.saveUser(user, currency);
-        String token = jwtUtil.generateToken(savedUser.getUserID(), 3600000); // Generate token with 1 hour expiration
-        return ResponseEntity.ok(new TokenResponse(token));
+        try {
+            if (user.getEmail() == null || user.getPassword() == null) {
+                return ResponseEntity.badRequest().body("Email and password are required");
+            }
+
+            User savedUser = userService.saveUser(user, currency);
+            String token = jwtUtil.generateToken(savedUser.getUserID(), 3600000); // Generate token with 1 hour expiration
+            return ResponseEntity.ok(new TokenResponse(token));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @GetMapping("/user")
-    public ResponseEntity<User> getUserById(@RequestHeader("token") String token) {
-        if (!jwtUtil.verifyToken(token)) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    public ResponseEntity<?> getUserById(@RequestHeader("token") String token) {
+        try {
+            if (!jwtUtil.verifyToken(token)) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            }
+
+            User user = userService.getUserFromToken(token);
+            if (user == null) {
+                return ResponseEntity.notFound().build();
+            }
+
+            return ResponseEntity.ok(user);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
-        User user = userService.getUserFromToken(token);
-        return ResponseEntity.ok(user);
     }
+
 
     // SIGN IN
     @GetMapping("/user/verify")
