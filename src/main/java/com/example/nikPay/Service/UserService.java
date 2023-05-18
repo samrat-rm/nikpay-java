@@ -1,5 +1,6 @@
 package com.example.nikPay.Service;
 
+import com.example.nikPay.Currency;
 import com.example.nikPay.Repository.UserRepo;
 import com.example.nikPay.Model.User;
 import com.example.nikPay.Repository.WalletRepo;
@@ -23,11 +24,11 @@ public class UserService {
         return Objects.equals(user.getPassword(), password);
     }
 
-    public User saveUser(User user){
+    public User saveUser(User user , Currency currency){
         if (user.getEmail() == null || user.getPassword() == null) {
             throw new IllegalArgumentException("User object cannot be null");
         }
-        Wallet wallet = new Wallet(user.getUserID());
+        Wallet wallet = new Wallet(user.getUserID(),currency );
         Wallet wal = walletRepo.save(wallet);
         System.out.println(wal);
         return userRepo.save(user);

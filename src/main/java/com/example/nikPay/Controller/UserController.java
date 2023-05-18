@@ -2,6 +2,7 @@ package com.example.nikPay.Controller;
 
 import com.example.nikPay.Config.JwtUtil;
 import com.example.nikPay.Config.TokenResponse;
+import com.example.nikPay.Currency;
 import com.example.nikPay.Service.UserService;
 import com.example.nikPay.Model.User;
 import com.example.nikPay.Service.WalletService;
@@ -27,8 +28,8 @@ public class UserController {
     private JwtUtil jwtUtil;
 
     @PostMapping("/user/save")
-    public ResponseEntity<?> saveUser(@RequestBody User user){
-        User savedUser = userService.saveUser(user);
+    public ResponseEntity<?> saveUser(@RequestBody User user ,@RequestParam("currency")Currency currency ){
+        User savedUser = userService.saveUser(user , currency);
         String token = jwtUtil.generateToken(savedUser.getUserID(), 3600000); // Generate token with 1 hour expiration
         return ResponseEntity.ok(new TokenResponse(token));
     }
@@ -46,7 +47,7 @@ public class UserController {
     }
 
     @GetMapping("/user/verify")
-    public ResponseEntity<Boolean> signIn(@RequestBody User user) {
+    public ResponseEntity<Boolean> signIn(@RequestBody User user ) {
         try {
             boolean isSignedIn = userService.checkPassword(user.getEmail(), user.getPassword());
             if(!isSignedIn){

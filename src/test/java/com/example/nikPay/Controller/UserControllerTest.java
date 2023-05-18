@@ -2,6 +2,7 @@ package com.example.nikPay.Controller;
 
 import com.example.nikPay.Config.JwtUtil;
 import com.example.nikPay.Config.TokenResponse;
+import com.example.nikPay.Currency;
 import com.example.nikPay.Service.UserService;
 import com.example.nikPay.Model.User;
 import com.example.nikPay.Service.WalletService;
@@ -50,7 +51,7 @@ public class UserControllerTest {
         User user = new User("example@example.com", "password" , "samrat","r m");
         user.setUserID("1");
 
-        when(userService.saveUser(any(User.class))).thenReturn(user);
+        when(userService.saveUser(any(User.class) , Currency.AUD)).thenReturn(user);
         when(jwtUtil.generateToken(eq("1"), anyLong())).thenReturn("mocked-token");
 
         mockMvc.perform(MockMvcRequestBuilders.post("/user/save")

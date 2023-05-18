@@ -1,5 +1,6 @@
 package com.example.nikPay.Model;
 
+import com.example.nikPay.Currency;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -14,6 +15,9 @@ public class Wallet {
 
     @JsonProperty("userID")
     String userID ;
+
+    @JsonProperty("currency")
+    Currency currency;
 
 
     public void setAmount(float amount) {
@@ -39,10 +43,17 @@ public class Wallet {
         // Default constructor
     }
 
-
-    public Wallet(String userID) {
-        this.userID = userID;
-        this.amount = 0;
+    public void setCurrency(Currency currency) {
+        this.currency = currency;
     }
 
+    public Currency getCurrency() {
+        return currency;
+    }
+
+    public Wallet(String userID, Currency currency) {
+        this.userID = userID;
+        this.currency = currency;
+        this.amount = 0f;
+    }
 }

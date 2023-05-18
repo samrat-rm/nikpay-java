@@ -1,5 +1,6 @@
 package com.example.nikPay.Service;
 
+import com.example.nikPay.Currency;
 import com.example.nikPay.Repository.UserRepo;
 import com.example.nikPay.Model.User;
 import com.example.nikPay.Repository.WalletRepo;
@@ -35,7 +36,7 @@ class UserServiceTest {
     @Test
     void testSaveUser_ValidUser_ReturnsSavedUser() {
         // Mock the walletRepo.save() method
-        when(walletRepo.save(any(Wallet.class))).thenReturn(new Wallet("walletId"));
+        when(walletRepo.save(any(Wallet.class))).thenReturn(new Wallet("walletId" , Currency.AUD));
 
         // Mock the userRepo.save() method
         User savedUser = new User("example@example.com", "password" , "samrat","r m");
@@ -43,7 +44,7 @@ class UserServiceTest {
 
         // Call the saveUser() method
         User user = new User("example@example.com", "password" , "samrat","r m");
-        User result = userService.saveUser(user);
+        User result = userService.saveUser(user , Currency.AUD);
 
         // Verify the walletRepo.save() method is called once
         verify(walletRepo, times(1)).save(any(Wallet.class));
@@ -61,7 +62,7 @@ class UserServiceTest {
         User user = new User(null, "password",  "samrat","r m");
 
         // Assert that an IllegalArgumentException is thrown
-        Assertions.assertThrows(IllegalArgumentException.class, () -> userService.saveUser(user));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> userService.saveUser(user , Currency.AUD));
 
         // Verify that walletRepo.save() method is not called
         verify(walletRepo, never()).save(any(Wallet.class));
@@ -76,7 +77,7 @@ class UserServiceTest {
         User user = new User("example@example.com", null,  "samrat","r m");
 
         // Assert that an IllegalArgumentException is thrown
-        Assertions.assertThrows(IllegalArgumentException.class, () -> userService.saveUser(user));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> userService.saveUser(user ,Currency.AUD));
 
         // Verify that walletRepo.save() method is not called
         verify(walletRepo, never()).save(any(Wallet.class));
