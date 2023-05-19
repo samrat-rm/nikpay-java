@@ -1,115 +1,116 @@
 package com.example.nikPay.Config;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 
 import javax.crypto.SecretKey;
-
 import java.util.Date;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+public class JwtUtilTest {
 
-class JwtUtilTest {
-
-    @Mock
+    private JwtUtil jwtUtil;
     private SecretKey secretKey;
 
-    @InjectMocks
-    private JwtUtil jwtUtil;
-
-    public JwtUtilTest() {
-        MockitoAnnotations.openMocks(this);
+    @BeforeEach
+    public void setup() {
+        secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+        jwtUtil = new JwtUtil(secretKey, SignatureAlgorithm.HS256);
     }
 
     @Test
-    void testGenerateToken_ValidSubjectAndExpiration_ReturnsToken() {
+    public void testGenerateToken() {
         // Arrange
-        String subject = "example@example.com";
-        long expirationMillis = 3600000; // 1 hour
-        SecretKey secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS256);
-        SignatureAlgorithm algorithm = SignatureAlgorithm.HS256;
-        JwtUtil jwtUtil = new JwtUtil(secretKey, algorithm);
+        String subject = "user123";
+        long expirationMillis = 10000; // 10 seconds
+
         // Act
         String token = jwtUtil.generateToken(subject, expirationMillis);
 
         // Assert
-        assertNotNull(token);
-        assertTrue(token.length() > 0);
+        Assertions.assertNotNull(token);
+
+        Claims claims = jwtUtil.parseToken(token);
+        String parsedSubject = claims.getSubject();
+        Assertions.assertEquals(subject, parsedSubject);
+
+        Date expirationDate = claims.getExpiration();
+        Assertions.assertNotNull(expirationDate);
     }
 
+
     @Test
-    void testParseToken_ValidToken_ReturnsClaims() {
+    public void testParseToken_ValidToken() {
         // Arrange
-        String token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhNTM1NmUwOS0wNzUyLTRkMzgtOWQxZi1lYmVmYWEwMzUyODkiLCJpYXQiOjE2ODQyOTg2NjAsImV4cCI6MTY4NDMwMjI2MH0.zEqoWe6P6YDT1KpdLYLSudRMzJun4bqYFyXZoFzRnKA";
+        String subject = "user123";
+        long expirationMillis = 10000; // 10 seconds
 
-        SecretKey secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS256);
-        SignatureAlgorithm algorithm = SignatureAlgorithm.HS256;
-        JwtUtil jwtUtil = new JwtUtil(secretKey, algorithm);
-
-        // Mock the claims
-        Claims mockClaims = mock(Claims.class);
-        when(jwtUtil.parseToken(token)).thenReturn(mockClaims);
+        String token = jwtUtil.generateToken(subject, expirationMillis);
 
         // Act
         Claims claims = jwtUtil.parseToken(token);
 
         // Assert
-        assertNotNull(claims);
-        assertEquals(mockClaims, claims);
+        Assertions.assertNotNull(claims);
+        Assertions.assertEquals(subject, claims.getSubject());
     }
 
     @Test
-    void testVerifyToken_ValidToken_ReturnsTrue() {
+    public void testParseToken_InvalidToken() {
         // Arrange
-        String token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhNTM1NmUwOS0wNzUyLTRkMzgtOWQxZi1lYmVmYWEwMzUyODkiLCJpYXQiOjE2ODQyOTg2NjAsImV4cCI6MTY4NDMwMjI2MH0.zEqoWe6P6YDT1KpdLYLSudRMzJun4bqYFyXZoFzRnKA";
+        String invalidToken = "invalid-token";
 
-        // Mock the claims' expiration
-        Claims mockClaims = mock(Claims.class);
-        when(mockClaims.getExpiration()).thenReturn(new Date(System.currentTimeMillis() + 1000)); // Expire after 1 second
-        when(jwtUtil.parseToken(token)).thenReturn(mockClaims);
+        // Act & Assert
+      Assertions.assertThrows(io.jsonwebtoken.MalformedJwtException.class,
+                () -> jwtUtil.parseToken(invalidToken));
+    }
+
+    @Test
+    public void testVerifyToken_ValidToken() {
+        // Arrange
+        String subject = "user123";
+        long expirationMillis = 10000; // 10 seconds
+
+        String token = jwtUtil.generateToken(subject, expirationMillis);
 
         // Act
         boolean isValid = jwtUtil.verifyToken(token);
 
         // Assert
-        assertTrue(isValid);
+        Assertions.assertTrue(isValid);
     }
 
     @Test
-    void testVerifyToken_ExpiredToken_ReturnsFalse() {
+    public void testVerifyToken_ExpiredToken() throws InterruptedException {
         // Arrange
-        String token = "expired_token";
+        String subject = "user123";
+        long expirationMillis = 1000; // 1 second
 
-        // Mock the claims' expiration
-        Claims mockClaims = mock(Claims.class);
-        when(mockClaims.getExpiration()).thenReturn(new Date(System.currentTimeMillis() - 1000)); // Expired 1 second ago
-        when(jwtUtil.parseToken(token)).thenReturn(mockClaims);
+        String token = jwtUtil.generateToken(subject, expirationMillis);
+
+        // Wait for token to expire
+        Thread.sleep(2000);
 
         // Act
         boolean isValid = jwtUtil.verifyToken(token);
 
         // Assert
-        assertFalse(isValid);
+        Assertions.assertFalse(isValid);
     }
 
     @Test
-    void testVerifyToken_InvalidToken_ReturnsFalse() {
+    public void testVerifyToken_InvalidToken() {
         // Arrange
-        String token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJiZjcwZDMxZi00MDMyLTRhNjgtYjc2YS01ODhlYjk1NWJiYjMiLCJpYXQiOjE2ODQzODQxNzcsImV4cCI6MTY4NDM4Nzc3N30.-aD809eY02rlcfQ9tiGI02xIj7KIkQzZ1NZsg5xBMRY";
-
-        // Mock the parseToken method to throw an exception
-        when(jwtUtil.parseToken(token)).thenThrow(new RuntimeException("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkYjlkMGU4OS01YTc4LTRkOGQtYjY1MC01MmJiMTA5OTNjZTYiLCJpYXQiOjE2ODQzODM1OTcsImV4cCI6MTY4NDM4NzE5N30.PJ_k6ZveyaNDwWqUKNOfNAE5kdiWhPv0T8FQxIQXi94"));
+        String invalidToken = "invalid-token";
 
         // Act
-        boolean isValid = jwtUtil.verifyToken(token);
+        boolean isValid = jwtUtil.verifyToken(invalidToken);
 
         // Assert
-        assertFalse(isValid);
+        Assertions.assertFalse(isValid);
     }
 }
