@@ -32,6 +32,7 @@ public class TransferServiceTest {
         MockitoAnnotations.openMocks(this);
     }
 
+
     @Test
     public void testTransfer_ValidData_SuccessfulTransfer() {
         // Arrange
@@ -71,7 +72,9 @@ public class TransferServiceTest {
         Mockito.verify(walletRepo, Mockito.times(2)).save(any(Wallet.class));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+
+
+    @Test
     public void testTransfer_InvalidToken_ThrowsException() {
         // Arrange
         String token = "invalid-token";
@@ -80,13 +83,17 @@ public class TransferServiceTest {
 
         when(userService.getUserFromToken(token)).thenReturn(null);
 
-        // Act
-        transferService.transfer(token, receiverEmail, amount);
-
-        // Expect IllegalArgumentException to be thrown
+        // Act and Assert
+        try {
+            transferService.transfer(token, receiverEmail, amount);
+            Assert.fail("Expected IllegalArgumentException to be thrown");
+        } catch (IllegalArgumentException e) {
+            // Assert
+            Assert.assertEquals("Invalid token", e.getMessage());
+        }
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testTransfer_ReceiverNotFound_ThrowsException() {
         // Arrange
         String token = "valid-token";
@@ -99,13 +106,17 @@ public class TransferServiceTest {
         when(userService.getUserFromToken(token)).thenReturn(sender);
         when(userService.getUserByEmail(receiverEmail)).thenReturn(null);
 
-        // Act
-        transferService.transfer(token, receiverEmail, amount);
-
-        // Expect IllegalArgumentException to be thrown
+        // Act and Assert
+        try {
+            transferService.transfer(token, receiverEmail, amount);
+            Assert.fail("Expected IllegalArgumentException to be thrown");
+        } catch (IllegalArgumentException e) {
+            // Assert
+            Assert.assertEquals("Receiver not found with email: receiver@example.com", e.getMessage());
+        }
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testTransfer_InsufficientFunds_ThrowsException() {
         // Arrange
         String token = "valid-token";
@@ -134,11 +145,16 @@ public class TransferServiceTest {
         when(walletRepo.findByUserID("sender-id")).thenReturn(senderWallet);
         when(walletRepo.findByUserID("receiver-id")).thenReturn(receiverWallet);
 
-        // Act
-        transferService.transfer(token, receiverEmail, amount);
-
-        // Expect IllegalArgumentException to be thrown
+        // Act and Assert
+        try {
+            transferService.transfer(token, receiverEmail, amount);
+            Assert.fail("Expected IllegalArgumentException to be thrown");
+        } catch (IllegalArgumentException e) {
+            // Assert
+            Assert.assertEquals("Insufficient funds in sender's wallet", e.getMessage());
+        }
     }
+
 
     @Test
     public void testCheckBalance_SufficientBalance_ReturnsTrue() {

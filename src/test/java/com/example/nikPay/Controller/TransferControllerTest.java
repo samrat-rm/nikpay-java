@@ -40,19 +40,15 @@ public class TransferControllerTest {
 
     @Before
     public void setup() {
-        // Mocking walletRepo findByUserID method
         Wallet wallet = new Wallet("123", "USD");
         wallet.setAmount(1000f);
         when(walletRepo.findByUserID(eq("123"))).thenReturn(wallet);
 
-        // Mocking jwtUtil verifyToken method
         when(jwtUtil.verifyToken(anyString())).thenReturn(true);
 
-        // Mocking userService getUserByEmail method
         User user = new User("example@example.com", "password", "John", "Doe");
         when(userService.getUserByEmail(eq("example@example.com"))).thenReturn(user);
 
-        // Mocking transferService transfer method
         when(transferService.transfer(anyString(), anyString(), anyFloat())).thenReturn(true);
     }
 
