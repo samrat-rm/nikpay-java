@@ -1,6 +1,7 @@
 package com.example.nikPay.Service;
 
 import com.example.nikPay.Config.JwtUtil;
+import com.example.nikPay.Config.MD5Hash;
 import com.example.nikPay.Currency;
 import com.example.nikPay.Repository.UserRepo;
 import com.example.nikPay.Model.User;
@@ -27,7 +28,8 @@ public class UserService {
     }
     public boolean checkPassword(String email, String password) {
         User user = userRepo.findByEmail(email);
-        return Objects.equals(user.getPassword(), password);
+        String hashedPassword = MD5Hash.getMD5Hash(password);
+        return Objects.equals(user.getPassword(),hashedPassword );
     }
     public User getUserByEmail(String email) {
         return userRepo.findByEmail(email);
@@ -59,7 +61,8 @@ public class UserService {
         }
         Wallet wallet = new Wallet(user.getUserID(), currency.name() );
         Wallet wal = walletRepo.save(wallet);
-        System.out.println(wal.getCurrency());
+        String hashedPassword = MD5Hash.getMD5Hash(user.getPassword());
+        user.setPassword(hashedPassword);
         return userRepo.save(user);
     }
 }

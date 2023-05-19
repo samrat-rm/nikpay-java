@@ -2,9 +2,7 @@ package com.example.nikPay.Controller;
 
 import com.example.nikPay.Config.JwtUtil;
 import com.example.nikPay.Currency;
-import com.example.nikPay.Model.User;
 import com.example.nikPay.Service.UserService;
-import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
