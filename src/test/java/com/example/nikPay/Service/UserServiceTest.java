@@ -1,6 +1,7 @@
 package com.example.nikPay.Service;
 
 import com.example.nikPay.Config.JwtUtil;
+import com.example.nikPay.Config.MD5Hash;
 import com.example.nikPay.Currency;
 import com.example.nikPay.Repository.UserRepo;
 import com.example.nikPay.Model.User;
@@ -101,14 +102,14 @@ class UserServiceTest {
         String password = "password";
         User user = new User();
         user.setEmail(email);
-        user.setPassword(password);
+        user.setPassword(MD5Hash.getMD5Hash(password));
         when(userRepo.findByEmail(email)).thenReturn(user);
 
         // Act
         boolean result = userService.checkPassword(email, password);
 
         // Assert
-        Assert.assertTrue(result);
+        Assertions.assertTrue(result);
     }
 
     @Test
