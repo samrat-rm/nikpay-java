@@ -7,6 +7,7 @@ import com.example.nikPay.Repository.WalletRepo;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -27,11 +28,10 @@ public class TransferServiceTest {
     @Mock
     private UserRepo userRepo;
 
-    @Before
-    public void setup() {
+    @BeforeEach
+    void setUp() {
         MockitoAnnotations.openMocks(this);
     }
-
 
     @Test
     public void testTransfer_ValidData_SuccessfulTransfer() {

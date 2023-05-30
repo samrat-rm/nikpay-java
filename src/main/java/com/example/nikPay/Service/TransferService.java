@@ -57,7 +57,7 @@ public class TransferService {
 
         receiverWallet.creditAmount(amount, senderCurrency);
         walletRepo.save(receiverWallet);
-        transferRecordService.saveTransferRecordsInWallet(sender.getUserID(), receiver.getUserID(), amount, senderCurrency);
+        transferRecordService.saveTransferRecord(sender.getUserID(), receiver.getUserID(), amount, senderCurrency);
 
         return true;
     }

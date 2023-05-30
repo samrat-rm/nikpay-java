@@ -1,4 +1,5 @@
 package com.example.nikPay.Model;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
@@ -6,6 +7,7 @@ import com.example.nikPay.Currency;
 import lombok.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -27,8 +29,8 @@ public class Wallet {
 
     private float amount;
 
-    @ElementCollection
-    private List<String> transactionIds;
+    @Column(length = 1000) // Adjust the length as per your needs
+    private String transactionIds;
 
     public float creditAmount(float amount, Currency currency) {
         Currency userCurrency = Currency.valueOf(this.currency);
@@ -66,8 +68,25 @@ public class Wallet {
         return this.getAmount();
     }
 
+    public List<String> getTransactionIds() {
+        if (transactionIds == null) {
+            return new ArrayList<>();
+        }
+        return new ArrayList<>(Arrays.asList(transactionIds.split(",")));
+    }
+
+    public void setTransactionIds(List<String> transactionIds) {
+        if (transactionIds == null || transactionIds.isEmpty()) {
+            this.transactionIds = null;
+        } else {
+            this.transactionIds = String.join(",", transactionIds);
+        }
+    }
+
     public void addTransactionId(String transactionId) {
-        this.transactionIds.add(transactionId);
+        List<String> ids = getTransactionIds();
+        ids.add(transactionId);
+        setTransactionIds(ids);
     }
 
     @Builder
@@ -75,6 +94,6 @@ public class Wallet {
         this.currency = currency;
         this.userID = userID;
         this.amount = 0f;
-        this.transactionIds = new ArrayList<>();
+        this.transactionIds = null;
     }
 }

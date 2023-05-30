@@ -11,12 +11,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class TransferRecordService {
 
-    private final TransferRecordsRepo transferRecordsRepo;
-
     @Autowired
-    public TransferRecordService(TransferRecordsRepo transferRecordRepository) {
-        this.transferRecordsRepo = transferRecordRepository;
-    }
+    private  TransferRecordsRepo transferRecordsRepo;
 
     @Autowired
     private WalletRepo walletRepo;
@@ -35,8 +31,13 @@ public class TransferRecordService {
         }
         Wallet senderWallet = walletRepo.findByUserID(sender);
         Wallet receiverWallet = walletRepo.findByUserID(receiver);
+
         senderWallet.addTransactionId(transactionID);
         receiverWallet.addTransactionId(transactionID);
+
+        walletRepo.save(senderWallet);
+        walletRepo.save(receiverWallet);
     }
 
 }
+
