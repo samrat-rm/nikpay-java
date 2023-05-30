@@ -58,8 +58,5 @@ public class TransferRecordService {
 
         return senderTransactions;
     }
-
-
-
 }
 
