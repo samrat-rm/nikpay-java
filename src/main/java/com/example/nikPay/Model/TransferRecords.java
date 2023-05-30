@@ -13,6 +13,8 @@ public class TransferRecords {
     private float amount;
     @JsonProperty("sender")
     private String sender;
+    @JsonProperty("receiver")
+    private String receiver;
 
     public Integer getId() {
         return id;
@@ -46,8 +48,6 @@ public class TransferRecords {
         return receiver;
     }
 
-    @JsonProperty("receiver")
-    private String receiver;
 
     public TransferRecords(float amount, String sender, String receiver) {
         this.amount = amount;
