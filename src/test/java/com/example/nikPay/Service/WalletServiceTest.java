@@ -2,6 +2,7 @@ package com.example.nikPay.Service;
 
 import com.example.nikPay.Currency;
 import com.example.nikPay.Model.Wallet;
+import com.example.nikPay.Repository.TransferRecordsRepo;
 import com.example.nikPay.Repository.WalletRepo;
 import com.example.nikPay.Service.WalletService;
 import org.junit.jupiter.api.Assertions;
@@ -18,9 +19,15 @@ import static org.mockito.Mockito.*;
 public class WalletServiceTest {
     @InjectMocks
     private WalletService walletService;
+    @InjectMocks
+    private TransferRecordService transferRecordService;
+
 
     @Mock
     private WalletRepo walletRepo;
+
+    @Mock
+    private TransferRecordsRepo transferRecordsRepo;
 
     @BeforeEach
     public void setup() {

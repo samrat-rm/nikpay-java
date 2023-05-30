@@ -20,9 +20,10 @@ public class WalletService {
     public float credit(String userID, float amount, Currency currency) {
         Wallet wallet = walletRepo.findByUserID(userID);
         if (wallet != null) {
-            float updatedAmount =  wallet.creditAmount(amount, currency);
+            Currency userCurrency = Currency.valueOf(wallet.getCurrency());
+            float updatedAmount = wallet.creditAmount(amount, currency);
             walletRepo.save(wallet);
-
+            transferRecordService.saveTransferRecordsInWallet(userID, userID, amount, userCurrency);
             return updatedAmount;
         } else {
             throw new IllegalArgumentException("Wallet not found for userID: " + userID);
@@ -34,6 +35,7 @@ public class WalletService {
         Wallet wallet = walletRepo.findByUserID(userID);
         if (wallet != null) {
             Currency userCurrency = Currency.valueOf(wallet.getCurrency());
+            transferRecordService.saveTransferRecordsInWallet(userID, userID, amount, userCurrency);
             return wallet.debitAmount(amount, currency);
         } else {
             throw new IllegalArgumentException("Wallet not found for userID: " + userID);
