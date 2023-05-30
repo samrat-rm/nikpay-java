@@ -62,8 +62,6 @@ public class User {
         return password;
     }
 
-
-
     public void setUserID(String userID) {
         this.userID = userID;
     }
@@ -82,5 +80,4 @@ public class User {
         this.firstName = firstName;
         this.lastName = lastName;
     }
-
 }

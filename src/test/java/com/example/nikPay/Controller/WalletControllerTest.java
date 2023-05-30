@@ -43,6 +43,8 @@ public class WalletControllerTest {
         mockMvc = MockMvcBuilders.standaloneSetup(walletController).build();
     }
 
+
+    // PUT !! method
     @Test
     public void testCreditAmount_Success() throws Exception {
         // Arrange
@@ -102,6 +104,8 @@ public class WalletControllerTest {
         // Assert
         Assert.assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
     }
+
+    // Unprocessable !!
 
     @Test
     public void testDebitAmount_InsufficientFunds_ReturnsBadRequest() throws Exception {

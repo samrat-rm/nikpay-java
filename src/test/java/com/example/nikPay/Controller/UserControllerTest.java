@@ -51,7 +51,7 @@ public class UserControllerTest {
         // Arrange
         User user = new User("example@example.com", "password", "samrat", "r m");
         user.setUserID("1");
-
+// base or dfault
         when(userService.saveUser(any(User.class), eq(Currency.AUD))).thenReturn(user);
         when(jwtUtil.generateToken(eq("1"), anyLong())).thenReturn("mocked-token");
 
@@ -104,7 +104,7 @@ public class UserControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().string("true"));
     }
-
+// rearrange
     @Test
     public void testSignIn_InvalidCredentials_ReturnsFalse() throws Exception {
         User user = new User("test1234@example.com", "password", "samrat", "r m");
@@ -115,8 +115,9 @@ public class UserControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"email\":\"test1234@example.com\",\"password\":\"password\"}"))
                 .andExpect(MockMvcResultMatchers.status().isUnauthorized())
-                .andExpect(MockMvcResultMatchers.content().string("false"));
+                .andExpect(MockMvcResultMatchers.content().string("false")); // error message !!
     }
+    // return err , 422 || 401 , res give feedback !!
 
     private Claims getMockClaims() {
         Claims claims = Jwts.claims();
