@@ -59,11 +59,13 @@ public class TransferRecords {
     }
 
 
-    public TransferRecords(float amount, String sender, String receiver) {
+    public TransferRecords(float amount, String sender, String receiver, String currency) {
         this.amount = amount;
         this.sender = sender;
         this.receiver = receiver;
+        this.currency = currency;
     }
+
     public TransferRecords() {
     }
 }

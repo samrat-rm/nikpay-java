@@ -64,7 +64,7 @@ public class UserService {
         Wallet wallet = new Wallet(user.getUserID(), currency.name() );
         Wallet wal = walletRepo.save(wallet);
         String hashedPassword = MD5Hash.getMD5Hash(user.getPassword());
-        user.setPassword(hashedPassword);
+        user.updateToHashPassword(hashedPassword);
         return userRepo.save(user);
     }
 }

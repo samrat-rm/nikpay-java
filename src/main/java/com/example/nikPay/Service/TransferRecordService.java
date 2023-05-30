@@ -23,8 +23,7 @@ public class TransferRecordService {
 
 
     public String saveTransferRecord(String senderId, String receiverId, float amount, Currency currency) {
-        TransferRecords transferRecord = new TransferRecords(amount, senderId, receiverId);
-        transferRecord.setCurrency(String.valueOf(currency));
+        TransferRecords transferRecord = new TransferRecords(amount, senderId, receiverId ,String.valueOf(currency) );
         TransferRecords savedRecord = transferRecordsRepo.save(transferRecord);
         return savedRecord.getId().toString();
     }
