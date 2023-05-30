@@ -50,6 +50,7 @@ public class WalletController {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
             }
             String userID = userService.getUserIDFromToken(token);
+
             float currentAmount = walletService.debit(userID, amount, currency);
             return ResponseEntity.ok(currentAmount);
 

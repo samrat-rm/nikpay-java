@@ -54,7 +54,9 @@ public class Wallet {
 
             // Deduct the converted amount from the wallet
             float previousAmount = this.getAmount();
+            System.out.println(previousAmount + "previousAmount");
             updatedAmount = previousAmount - convertedAmount;
+            System.out.println(updatedAmount + "updatedAmount");
         }
         if (updatedAmount < 0) {
             throw new IllegalArgumentException("Insufficient funds. Cannot debit amount: " + amount);
