@@ -22,9 +22,8 @@ public class TransferRecordsController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/transactions/sender/{userId}")
+    @GetMapping("/transactions")
     public ResponseEntity<List<TransferRecords>> getSenderTransactions(
-            @PathVariable String userId,
             @RequestParam TransactionType transactionType,
             @RequestHeader("token") String token
     ) {
@@ -32,6 +31,7 @@ public class TransferRecordsController {
         if (!jwtUtil.verifyToken(token)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
+        String userId = userService.getUserIDFromToken(token);
         if (!userService.isValidUserId(userId)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
