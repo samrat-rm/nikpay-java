@@ -9,12 +9,22 @@ public class TransferRecords {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Integer id;
-    @JsonProperty("amount")
+
     private float amount;
-    @JsonProperty("sender")
+
     private String sender;
-    @JsonProperty("receiver")
+
     private String receiver;
+
+    private String currency;
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
 
     public Integer getId() {
         return id;
