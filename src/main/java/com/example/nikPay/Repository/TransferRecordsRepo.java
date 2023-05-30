@@ -5,11 +5,13 @@ import com.example.nikPay.Model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface TransferRecordsRepo extends JpaRepository<TransferRecords, Integer> {
-    TransferRecords findBySender(String sender);
+    List<TransferRecords> findBySender(String senderId);
 
-    TransferRecords findByReceiver(String receiver);
+    List<TransferRecords> findByReceiver(String receiverId);
 }
 
 

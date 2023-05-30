@@ -65,4 +65,8 @@ public class UserService {
         user.updateToHashPassword(hashedPassword);
         return userRepo.save(user);
     }
+
+    public boolean isValidUserId(String userId) {
+        return userRepo.existsByUserID(userId);
+    }
 }

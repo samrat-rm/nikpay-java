@@ -8,6 +8,8 @@ import com.example.nikPay.Repository.WalletRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class TransferRecordService {
 
@@ -37,6 +39,14 @@ public class TransferRecordService {
 
         walletRepo.save(senderWallet);
         walletRepo.save(receiverWallet);
+    }
+
+    public List<TransferRecords> getSenderTransactions(String senderId) {
+        return transferRecordsRepo.findBySender(senderId);
+    }
+
+    public List<TransferRecords> getReceiverTransactions(String receiverId) {
+        return transferRecordsRepo.findByReceiver(receiverId);
     }
 
 }
