@@ -36,10 +36,13 @@ public class TransferRecordsController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
         List<TransferRecords> transactions;
-        if (transactionType == TransactionType.CREDIT) {
+
+        if (transactionType == TransactionType.DEBIT) {
             transactions = transferRecordService.getSenderTransactions(userId);
-        } else {
+        } else if(transactionType == TransactionType.CREDIT) {
             transactions = transferRecordService.getReceiverTransactions(userId);
+        }else{
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
         return ResponseEntity.ok(transactions);
     }

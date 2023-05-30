@@ -5,6 +5,7 @@ import com.example.nikPay.Model.Wallet;
 import com.example.nikPay.Repository.WalletRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 import static com.example.nikPay.Service.CurrencyService.convertCurrency;
@@ -40,29 +41,33 @@ public class WalletService {
         }
         return null;
     }
+
     public float credit(String userID, float amount, Currency currency) {
+
         Wallet wallet = walletRepo.findByUserID(userID);
-        if (wallet != null) {
-            Currency userCurrency = Currency.valueOf(wallet.getCurrency());
-            float updatedAmount = wallet.creditAmount(amount, currency);
-            walletRepo.save(wallet);
-            transferRecordService.saveTransferRecordsInWallet(userID, userID, amount, userCurrency);
-            return updatedAmount;
-        } else {
+        if (wallet == null) {
             throw new IllegalArgumentException("Wallet not found for userID: " + userID);
         }
+        Currency userCurrency = Currency.valueOf(wallet.getCurrency());
+        float updatedAmount = wallet.creditAmount(amount, currency);
+        walletRepo.save(wallet);
+        transferRecordService.saveTransferRecordsInWallet("self", userID, updatedAmount, userCurrency);
+        return updatedAmount;
+
     }
 
     public float debit(String userID, float amount, Currency currency) {
 
         Wallet wallet = walletRepo.findByUserID(userID);
-        if (wallet != null) {
-            Currency userCurrency = Currency.valueOf(wallet.getCurrency());
-            transferRecordService.saveTransferRecordsInWallet(userID, userID, amount, userCurrency);
-            return wallet.debitAmount(amount, currency);
-        } else {
+        if (wallet == null) {
             throw new IllegalArgumentException("Wallet not found for userID: " + userID);
         }
+        Currency userCurrency = Currency.valueOf(wallet.getCurrency());
+        float updatedAmount =  wallet.debitAmount(amount, currency);
+        walletRepo.save(wallet);
+        transferRecordService.saveTransferRecordsInWallet(userID, "self", updatedAmount, userCurrency);
+        return updatedAmount;
+
     }
 
     public void save(Wallet wallet) {

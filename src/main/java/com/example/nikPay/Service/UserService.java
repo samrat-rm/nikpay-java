@@ -23,14 +23,16 @@ public class UserService {
     private JwtUtil jwtUtil;
 
 
-    public User getUser(String id){
+    public User getUser(String id) {
         return userRepo.findByUserID(id);
     }
+
     public boolean checkPassword(String email, String password) {
         User user = userRepo.findByEmail(email);
         String hashedPassword = MD5Hash.getMD5Hash(password);
-        return Objects.equals(user.getPassword(),hashedPassword );
+        return Objects.equals(user.getPassword(), hashedPassword);
     }
+
     public User getUserByEmail(String email) {
         return userRepo.findByEmail(email);
     }
@@ -38,28 +40,27 @@ public class UserService {
     public User getUserFromToken(String token) {
         Claims claims = jwtUtil.parseToken(token);
         String userID = claims.getSubject();
-        if (userID != null) {
-            return userRepo.findByUserID(userID);
-        } else {
+        if (userID == null) {
             throw new IllegalArgumentException("Invalid token");
         }
+        return userRepo.findByUserID(userID);
+
     }
 
     public String getUserIDFromToken(String token) {
         Claims claims = jwtUtil.parseToken(token);
         String userID = claims.getSubject();
-        if (userID != null) {
-            return userID;
-        } else {
+        if (userID == null) {
             throw new IllegalArgumentException("Invalid token");
         }
+        return userID;
     }
 
-    public User saveUser(User user , Currency currency){
+    public User saveUser(User user, Currency currency) {
         if (user.getEmail() == null || user.getPassword() == null) {
             throw new IllegalArgumentException("User object cannot be null");
         }
-        Wallet wallet = new Wallet(user.getUserID(), currency.name() );
+        Wallet wallet = new Wallet(user.getUserID(), currency.name());
         Wallet wal = walletRepo.save(wallet);
         String hashedPassword = MD5Hash.getMD5Hash(user.getPassword());
         user.updateToHashPassword(hashedPassword);
