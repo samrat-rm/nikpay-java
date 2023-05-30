@@ -14,11 +14,15 @@ public class WalletService {
     @Autowired
     private WalletRepo walletRepo;
 
+    @Autowired
+    private TransferRecordService transferRecordService;
+
     public float credit(String userID, float amount, Currency currency) {
         Wallet wallet = walletRepo.findByUserID(userID);
         if (wallet != null) {
             float updatedAmount =  wallet.creditAmount(amount, currency);
             walletRepo.save(wallet);
+
             return updatedAmount;
         } else {
             throw new IllegalArgumentException("Wallet not found for userID: " + userID);

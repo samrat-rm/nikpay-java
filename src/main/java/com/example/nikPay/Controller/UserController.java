@@ -64,6 +64,7 @@ public class UserController {
     public ResponseEntity<Boolean> signIn(@RequestBody User user) {
         try {
             boolean isSignedIn = userService.checkPassword(user.getEmail(), user.getPassword());
+            System.out.println(user.getEmail() + "   " + user.getPassword());
             if (!isSignedIn) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
             }

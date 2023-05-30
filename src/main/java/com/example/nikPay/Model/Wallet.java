@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 
 import com.example.nikPay.Currency;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import static com.example.nikPay.Service.CurrencyService.convertCurrency;
@@ -20,6 +22,9 @@ public class Wallet {
     private String userID;
 
     private float amount;
+
+    @ElementCollection
+    private List<String> transactionIds;
 
     public String getCurrency() {
         return currency;
@@ -79,10 +84,23 @@ public class Wallet {
         return this.getAmount();
     }
 
+    public List<String> getTransactionIds() {
+        return transactionIds;
+    }
+
+    public void setTransactionIds(List<String> transactionIds) {
+        this.transactionIds = transactionIds;
+    }
+
+    public void addTransactionId(String transactionId) {
+        this.transactionIds.add(transactionId);
+    }
+
     public Wallet(String userID, String currency) {
         this.currency = currency;
         this.userID = userID;
         this.amount = 0f;
+        this.transactionIds = new ArrayList<>();
     }
 
     public Wallet() {

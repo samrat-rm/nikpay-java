@@ -7,8 +7,6 @@ import com.example.nikPay.Repository.WalletRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.nikPay.Model.*;
-import java.util.Objects;
-import java.util.UUID;
 
 @Service
 public class TransferService {
@@ -17,10 +15,13 @@ public class TransferService {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private TransferRecordService transferRecordService;
     @Autowired
     private UserRepo userRepo;
 
-    public User getUserByEmail(String email){
+    public User getUserByEmail(String email) {
         return userRepo.findByEmail(email);
     }
 
@@ -56,14 +57,26 @@ public class TransferService {
 
         receiverWallet.creditAmount(amount, senderCurrency);
         walletRepo.save(receiverWallet);
+        saveTransferRecords(sender.getUserID(), receiver.getUserID(), amount, senderCurrency);
 
         return true;
     }
 
-    public boolean checkBalance(String userID , float debitAmount ){
-        Wallet wallet  = walletRepo.findByUserID(userID);
+    public void saveTransferRecords(String sender, String receiver, float amount, Currency senderCurrency) {
+        String transactionID = transferRecordService.saveTransferRecord(sender, receiver, amount, senderCurrency);
+        if (transactionID == null) {
+            throw new RuntimeException("Failed to save transfer record.");
+        }
+        Wallet senderWallet = walletRepo.findByUserID(sender);
+        Wallet receiverWallet = walletRepo.findByUserID(receiver);
+        senderWallet.addTransactionId(transactionID);
+        receiverWallet.addTransactionId(transactionID);
+    }
+
+    public boolean checkBalance(String userID, float debitAmount) {
+        Wallet wallet = walletRepo.findByUserID(userID);
         float balance = wallet.getAmount();
-        return balance > debitAmount ;
+        return balance > debitAmount;
     }
 
 }

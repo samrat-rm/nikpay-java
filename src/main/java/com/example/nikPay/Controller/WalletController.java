@@ -24,16 +24,21 @@ public class WalletController {
     @PostMapping("/wallet/credit")
     public ResponseEntity<Float> creditAmount(@RequestParam("amount") float amount, @RequestParam("currency") Currency currency, @RequestHeader("token") String token) {
         try {
+
             if (!jwtUtil.verifyToken(token)) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
             }
+
             String userID = userService.getUserIDFromToken(token);
+
             float currentAmount = walletService.credit(userID, amount, currency);
+
             return ResponseEntity.ok(currentAmount);
 
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         } catch (Exception e) {
+            System.out.println(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }

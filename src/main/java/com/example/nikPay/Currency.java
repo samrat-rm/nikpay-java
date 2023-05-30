@@ -2,7 +2,7 @@ package com.example.nikPay;
 
 public enum Currency {
     USD("United States Dollar"),
-    EUR("Euro"),
+    EURO("Euro"),
     JPY("Japanese Yen"),
     GBP("British Pound Sterling"),
     AUD("Australian Dollar"),

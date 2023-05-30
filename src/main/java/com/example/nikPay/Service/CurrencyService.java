@@ -17,8 +17,10 @@ public class CurrencyService {
         currencyRates.put("JPY", 138.44f);
         currencyRates.put("CAD", 1.35f);
 
+
         float baseCurrencyRate = currencyRates.get(baseCurrency.name());
         float targetCurrencyRate = currencyRates.get(targetCurrency.name());
+
         float ratio = targetCurrencyRate/baseCurrencyRate;
         return value * ratio;
     }
