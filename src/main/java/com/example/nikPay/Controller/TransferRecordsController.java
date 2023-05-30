@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -24,7 +25,6 @@ public class TransferRecordsController {
 
     @GetMapping("/transactions")
     public ResponseEntity<List<TransferRecords>> getSenderTransactions(
-            @RequestParam TransactionType transactionType,
             @RequestHeader("token") String token
     ) {
 
@@ -32,17 +32,14 @@ public class TransferRecordsController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         String userId = userService.getUserIDFromToken(token);
+
         if (!userService.isValidUserId(userId)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
-        List<TransferRecords> transactions;
 
-        if (transactionType == TransactionType.DEBIT) {
-            transactions = transferRecordService.getSenderTransactions(userId);
-        } else if(transactionType == TransactionType.CREDIT) {
-            transactions = transferRecordService.getReceiverTransactions(userId);
-        }else{
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        List<TransferRecords> transactions = transferRecordService.getTransactions(userId);
+        if (transactions.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.emptyList());
         }
         return ResponseEntity.ok(transactions);
     }

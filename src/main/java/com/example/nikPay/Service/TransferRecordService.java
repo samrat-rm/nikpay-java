@@ -49,8 +49,8 @@ public class TransferRecordService {
         }
     }
 
-    public List<TransferRecords> getSenderTransactions(String senderId) {
-        Wallet wallet = walletRepo.findByUserID(senderId);
+    public List<TransferRecords> getTransactions(String userID) {
+        Wallet wallet = walletRepo.findByUserID(userID);
         List<String> transactionIds = wallet.getTransactionIds();
 
         // Query the transaction table with the converted transactionIds
@@ -60,9 +60,6 @@ public class TransferRecordService {
     }
 
 
-    public List<TransferRecords> getReceiverTransactions(String receiverId) {
-        return transferRecordsRepo.findByReceiver(receiverId);
-    }
 
 }
 
