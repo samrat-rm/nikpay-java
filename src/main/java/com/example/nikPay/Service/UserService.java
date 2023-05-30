@@ -28,9 +28,7 @@ public class UserService {
     }
     public boolean checkPassword(String email, String password) {
         User user = userRepo.findByEmail(email);
-        System.out.println("-------------------------------");
         String hashedPassword = MD5Hash.getMD5Hash(password);
-        System.out.println(hashedPassword);
         return Objects.equals(user.getPassword(),hashedPassword );
     }
     public User getUserByEmail(String email) {

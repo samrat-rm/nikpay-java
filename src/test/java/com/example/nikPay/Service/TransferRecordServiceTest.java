@@ -30,7 +30,8 @@ public class TransferRecordServiceTest {
 
     @InjectMocks
     private TransferRecordService transferRecordService;
-
+    @InjectMocks
+    private WalletService walletService;
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
@@ -43,7 +44,7 @@ public class TransferRecordServiceTest {
         float amount = 100.0f;
         Currency currency = Currency.USD;
 
-        TransferRecords transferRecord = new TransferRecords(amount, senderId, receiverId);
+        TransferRecords transferRecord = new TransferRecords(amount, senderId, receiverId, String.valueOf(currency));
         transferRecord.setCurrency(String.valueOf(currency));
         TransferRecords savedRecord = new TransferRecords();
         savedRecord.setId(1);
@@ -78,7 +79,7 @@ public class TransferRecordServiceTest {
         Mockito.when(transferRecordsRepo.save(Mockito.any(TransferRecords.class))).thenReturn(savedRecord);
 
         // Act
-        transferRecordService.saveTransferRecordsInWallet(senderId, receiverId, amount, senderCurrency);
+        transferRecordService.saveTransferRecordsInWallet(senderId, receiverId, amount,(senderCurrency));
 
         // Assert
         Assertions.assertEquals(1, senderWallet.getTransactionIds().size());

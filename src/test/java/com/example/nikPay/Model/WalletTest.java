@@ -8,13 +8,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import static com.example.nikPay.Service.CurrencyService.convertCurrency;
-
-
-
 
 
 public class WalletTest {
