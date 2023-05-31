@@ -40,35 +40,4 @@ public class CurrencyServiceTest {
         assertEquals(expectedConvertedValue, convertedValue);
     }
 
-//    @Test
-//    public void testConvertCurrency_CurrencyRates() {
-//        // Arrange
-//        Currency baseCurrency = Currency.USD;
-//        Currency targetCurrency = Currency.EURO;
-//        float value = 100f;
-//        float baseCurrencyRate = 1f;
-//        float targetCurrencyRate = 0.93f;
-//        float expectedConvertedValue = value * (targetCurrencyRate / baseCurrencyRate);
-//
-//        // Mock the CurrencyService class
-//        CurrencyService currencyService = new CurrencyService();
-//
-//        // Use reflection to set the currency rates map directly
-//        Map<String, Float> currencyRates = new HashMap<>();
-//        currencyRates.put("USD", baseCurrencyRate);
-//        currencyRates.put("EURO", targetCurrencyRate);
-//        try {
-//            java.lang.reflect.Field field = currencyService.getClass().getDeclaredField("currencyRates");
-//            field.setAccessible(true);
-//            field.set(currencyService, currencyRates);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//
-//        // Act
-//        float convertedValue = currencyService.convertCurrency(baseCurrency, targetCurrency, value);
-//
-//        // Assert
-//        assertEquals(expectedConvertedValue, convertedValue);
-//    }
 }
