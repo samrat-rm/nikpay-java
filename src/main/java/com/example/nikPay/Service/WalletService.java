@@ -52,7 +52,7 @@ public class WalletService {
         Currency userCurrency = Currency.valueOf(wallet.getCurrency());
         float updatedAmount = wallet.creditAmount(amount, currency);
         walletRepo.save(wallet);
-        transferRecordService.saveTransferRecordsInWallet("self", userID, updatedAmount, userCurrency);
+        transferRecordService.saveTransferRecordsInWallet("self", userID, amount, currency);
         return updatedAmount;
 
     }
@@ -66,7 +66,7 @@ public class WalletService {
         Currency userCurrency = Currency.valueOf(wallet.getCurrency());
         float updatedAmount =  wallet.debitAmount(amount, currency);
         walletRepo.save(wallet);
-        transferRecordService.saveTransferRecordsInWallet(userID, "self", updatedAmount, userCurrency);
+        transferRecordService.saveTransferRecordsInWallet(userID, "self", amount, currency);
         return updatedAmount;
 
     }
