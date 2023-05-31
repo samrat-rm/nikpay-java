@@ -1,13 +1,9 @@
 package com.example.nikPay.Service;
 
-import com.example.nikPay.Currency;
+import com.example.nikPay.Enums.Currency;
 import org.junit.jupiter.api.Test;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
 
 public class CurrencyServiceTest {
 

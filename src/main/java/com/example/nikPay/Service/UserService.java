@@ -2,7 +2,7 @@ package com.example.nikPay.Service;
 
 import com.example.nikPay.Config.JwtUtil;
 import com.example.nikPay.Config.MD5Hash;
-import com.example.nikPay.Currency;
+import com.example.nikPay.Enums.Currency;
 import com.example.nikPay.Repository.UserRepo;
 import com.example.nikPay.Model.User;
 import com.example.nikPay.Repository.WalletRepo;

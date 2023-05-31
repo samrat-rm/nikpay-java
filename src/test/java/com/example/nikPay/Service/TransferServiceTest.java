@@ -1,12 +1,9 @@
 package com.example.nikPay.Service;
-import com.example.nikPay.Currency;
+import com.example.nikPay.Enums.Currency;
 import com.example.nikPay.Model.User;
 import com.example.nikPay.Model.Wallet;
 import com.example.nikPay.Repository.UserRepo;
 import com.example.nikPay.Repository.WalletRepo;
-import com.example.nikPay.Service.TransferRecordService;
-import com.example.nikPay.Service.TransferService;
-import com.example.nikPay.Service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

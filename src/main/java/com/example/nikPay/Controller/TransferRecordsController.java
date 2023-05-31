@@ -3,7 +3,6 @@ package com.example.nikPay.Controller;
 import com.example.nikPay.Model.TransferRecords;
 import com.example.nikPay.Service.TransferRecordService;
 import com.example.nikPay.Service.UserService;
-import com.example.nikPay.TransactionType;
 import com.example.nikPay.Config.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

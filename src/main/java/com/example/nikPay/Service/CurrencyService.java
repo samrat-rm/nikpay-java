@@ -1,6 +1,6 @@
 package com.example.nikPay.Service;
 
-import com.example.nikPay.Currency;
+import com.example.nikPay.Enums.Currency;
 
 import java.util.HashMap;
 import java.util.Map;

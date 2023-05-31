@@ -1,14 +1,12 @@
 package com.example.nikPay.Service;
 
-import com.example.nikPay.Currency;
+import com.example.nikPay.Enums.Currency;
 import com.example.nikPay.Model.Wallet;
 import com.example.nikPay.Repository.WalletRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
-import static com.example.nikPay.Service.CurrencyService.convertCurrency;
 
 
 @Service

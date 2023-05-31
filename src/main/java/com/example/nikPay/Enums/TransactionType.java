@@ -1,4 +1,4 @@
-package com.example.nikPay;
+package com.example.nikPay.Enums;
 
 public enum TransactionType {
     CREDIT,

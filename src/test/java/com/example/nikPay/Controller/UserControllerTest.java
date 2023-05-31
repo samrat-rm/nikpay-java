@@ -1,11 +1,9 @@
 package com.example.nikPay.Controller;
 
 import com.example.nikPay.Config.JwtUtil;
-import com.example.nikPay.Config.TokenResponse;
-import com.example.nikPay.Currency;
+import com.example.nikPay.Enums.Currency;
 import com.example.nikPay.Service.UserService;
 import com.example.nikPay.Model.User;
-import com.example.nikPay.Service.WalletService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,9 +12,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;

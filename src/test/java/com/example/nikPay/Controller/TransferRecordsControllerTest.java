@@ -3,7 +3,7 @@ package com.example.nikPay.Controller;
 import com.example.nikPay.Model.TransferRecords;
 import com.example.nikPay.Service.TransferRecordService;
 import com.example.nikPay.Service.UserService;
-import com.example.nikPay.TransactionType;
+import com.example.nikPay.Enums.TransactionType;
 import com.example.nikPay.Config.JwtUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,7 +13,6 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;

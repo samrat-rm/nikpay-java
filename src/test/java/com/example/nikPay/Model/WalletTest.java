@@ -1,13 +1,11 @@
 package com.example.nikPay.Model;
 
-import com.example.nikPay.Currency;
+import com.example.nikPay.Enums.Currency;
 import com.example.nikPay.Service.CurrencyService;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
-
 
 
 public class WalletTest {

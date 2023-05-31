@@ -1,15 +1,13 @@
 package com.example.nikPay.Model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
-import com.example.nikPay.Currency;
+import com.example.nikPay.Enums.Currency;
 import lombok.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 
 import static com.example.nikPay.Service.CurrencyService.convertCurrency;
 

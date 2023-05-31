@@ -1,6 +1,6 @@
 package com.example.nikPay.Service;
 
-import com.example.nikPay.Currency;
+import com.example.nikPay.Enums.Currency;
 import com.example.nikPay.Model.TransferRecords;
 import com.example.nikPay.Model.Wallet;
 import com.example.nikPay.Repository.TransferRecordsRepo;
@@ -14,8 +14,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class)
 public class TransferRecordServiceTest {
