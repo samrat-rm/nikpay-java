@@ -146,6 +146,4 @@ public class TransferServiceTest {
         verifyNoMoreInteractions(walletRepo, transferRecordService);
     }
 
-    // Add more test cases as needed
-
 }

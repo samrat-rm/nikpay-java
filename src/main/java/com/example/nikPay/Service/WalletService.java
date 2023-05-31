@@ -20,8 +20,9 @@ public class WalletService {
     private TransferRecordService transferRecordService;
 
     @Autowired
-    public WalletService(WalletRepo walletRepo) {
+    public WalletService(WalletRepo walletRepo, TransferRecordService transferRecordService) {
         this.walletRepo = walletRepo;
+        this.transferRecordService = transferRecordService;
     }
 
     public Wallet createWallet(String userID, String currency) {

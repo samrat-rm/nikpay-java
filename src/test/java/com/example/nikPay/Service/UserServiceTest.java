@@ -61,8 +61,6 @@ class UserServiceTest {
 
         Assertions.assertThrows(IllegalArgumentException.class, () -> userService.saveUser(user , Currency.AUD));
 
-
-        // never() checks if the method was called
         verify(walletRepo, never()).save(any(Wallet.class));
 
         verify(userRepo, never()).save(any(User.class));
